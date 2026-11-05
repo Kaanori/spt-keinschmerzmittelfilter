@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>KeinSchmerzmittelFilter</AssemblyName>
+    <RootNamespace>KeinSchmerzmittelFilter</RootNamespace>
+    <Version>1.0.0</Version>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Description>Removes the desaturation screen effect of painkillers, the painkiller itself keeps working</Description>
+    <GameDir Condition="'$(GameDir)' == ''">/mnt/nvmegames/Games/SPT-416</GameDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameDir)/EscapeFromTarkov_Data/Managed/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameDir)/EscapeFromTarkov_Data/Managed/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameDir)/EscapeFromTarkov_Data/Managed/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx"><HintPath>$(GameDir)/BepInEx/core/BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(GameDir)/BepInEx/core/0Harmony.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <!-- Ins Spiel kopieren NUR auf Ansage:
+         ~/.dotnet/dotnet build -c Release -p:Installieren=true
+       Ein normaler Probebau fasst das Spiel nicht an. -->
+  <Target Name="InsSpiel" AfterTargets="Build" Condition="'$(Installieren)' == 'true'">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GameDir)/BepInEx/plugins" Condition="Exists('$(GameDir)/BepInEx/plugins')" />
+    <Message Importance="high" Text="-> $(GameDir)/BepInEx/plugins/KeinSchmerzmittelFilter.dll (Spiel neu starten)" />
+  </Target>
+
+</Project>
